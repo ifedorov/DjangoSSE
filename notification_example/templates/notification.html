@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<h1>Notification example messages</h1>
+<a target="_blank" href="{% url 'create_message' %}?message=some message text">Generate new message</a>
+<hr/>
+<table>
+    <thead>
+        <tr>
+            <th>SSE FROM SERVER</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+</body>
+<script type="application/javascript">
+    $(document).ready(()=>{
+        var url = "{% url 'notifications' %}"
+        var evtSource = new EventSource(url);
+        evtSource.addEventListener('message', function(event) {
+            $('table>tbody').append(
+               $(`<tr><td>${event.data}</td></tr>`)
+            )
+        })
+        evtSource.onerror = function(event) {
+          console.log('error', event)
+        }
+    })
+</script>
+</html>
